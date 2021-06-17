@@ -1,44 +1,26 @@
-# Golang grpc server streaming example
+# Golang grpc server/client streaming example with tracing via grpc-middleware
 
-Simple grpc server streaming capability with Golang, this code will have server and client each:
-* Server: Will have a function that will stream 5 responses with slight delay each.
-* Client: Will send a request to server and wait on all the responses.
----
-# Running it
-Run with makefile
-```
-make all
-```
-This will create the pb file for grpc and also the client and server binary.
----
+Simple grpc streaming examples for both client and server streaming, with automatic tracing via grpc-middleware library.
+
 # Usage
 
-## Build Docker Image using docker compose
-```
-docker-compose -f docker-compose.yml build
-```
+Spin up a jaeger docker to collect traces:
 
-## Run up all docker containers using docker compose
 ```
-docker-compose -f docker-compose.yml up
-```
+docker run -d --name jaeger \
+  -e COLLECTOR_ZIPKIN_HOST_PORT=:9411 \
+  -p 5775:5775/udp \
+  -p 6831:6831/udp \
+  -p 6832:6832/udp \
+  -p 5778:5778 \
+  -p 16686:16686 \
+  -p 14268:14268 \
+  -p 14250:14250 \
+  -p 9411:9411 \
+  jaegertracing/all-in-one:1.23
+  ```
 
-This will be shown in client
-```
-2020/11/10 22:26:11 Resp received: Request #0 For Id:1
-2020/11/10 22:26:12 Resp received: Request #1 For Id:1
-2020/11/10 22:26:13 Resp received: Request #2 For Id:1
-2020/11/10 22:26:14 Resp received: Request #3 For Id:1
-2020/11/10 22:26:15 Resp received: Request #4 For Id:1
-2020/11/10 22:26:15 finished
-```
-This will be shown in server
-```
-2020/11/10 22:26:09 start server
-2020/11/10 22:26:11 fetch response for id : 1
-2020/11/10 22:26:11 finishing request number : 0
-2020/11/10 22:26:12 finishing request number : 1
-2020/11/10 22:26:13 finishing request number : 2
-2020/11/10 22:26:14 finishing request number : 3
-2020/11/10 22:26:15 finishing request number : 4
-```
+Choose an example (clientstreaming or serverstreaming) and in one terminal move to the server directory and start the server with ```go run server.go```. In another terminal move to the client directory and start the client with ```go run client.go```
+
+You should see output in the termainl and traces in your jaeger UI (http://localhost:16686)
+
