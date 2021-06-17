@@ -8,7 +8,7 @@ import (
 	"sync"
 	"time"
 
-	pb "github.com/pramonow/go-grpc-server-streaming-example/src/proto"
+	pb "github.com/pigfrown/go-grpc-opentracing-streaming-example/serverstreaming/proto"
 
 	"github.com/grpc-ecosystem/go-grpc-middleware"
 	"github.com/grpc-ecosystem/go-grpc-middleware/tracing/opentracing"
